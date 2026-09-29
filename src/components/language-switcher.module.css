@@ -1,0 +1,8 @@
+.container {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.buttonText {
+  font-size: 0.875rem;
+}

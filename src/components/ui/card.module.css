@@ -1,0 +1,105 @@
+/* Card component - migrated from Tailwind utility classes */
+
+:root {
+  --card-spacing: 1rem; /* default spacing (4) */
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-spacing);
+  overflow: hidden;
+  border-radius: 0.75rem; /* rounded-xl */
+  background-color: #ffffff; /* bg-card */
+  padding-top: var(--card-spacing);
+  padding-bottom: var(--card-spacing);
+  font-size: 0.875rem; /* text-sm */
+  color: #1e293b; /* text-card-foreground (slate-800) */
+  border: 1px solid rgba(148, 163, 184, 0.1); /* ring-1 ring-foreground/10 */
+}
+
+.card[data-size="sm"] {
+  --card-spacing: 0.75rem; /* spacing(3) for small size */
+}
+
+/* When card has a footer, remove bottom padding from card body */
+.card:has([data-slot="card-footer"]) {
+  padding-bottom: 0;
+}
+
+.card[data-size="sm"]:has([data-slot="card-footer"]) {
+  padding-bottom: 0;
+}
+
+/* Image at top should not have card's top padding */
+.card > img:first-child {
+  border-radius: 0.75rem 0.75rem 0 0; /* rounded-t-xl */
+}
+
+.card:has(> img:first-child) {
+  padding-top: 0;
+}
+
+/* Image at bottom should not have card's bottom padding */
+.card > img:last-child {
+  border-radius: 0 0 0.75rem 0.75rem; /* rounded-b-xl */
+}
+
+.card-header {
+  display: grid;
+  auto-rows: min-content;
+  align-items: start;
+  gap: 0.25rem; /* gap-1 */
+  border-radius: 0.75rem 0.75rem 0 0; /* rounded-t-xl */
+  padding-left: var(--card-spacing);
+  padding-right: var(--card-spacing);
+}
+
+/* When header has an action, use two-column grid */
+.card-header:has([data-slot="card-action"]) {
+  grid-template-columns: 1fr auto;
+}
+
+/* When header has description, stack title and description */
+.card-header:has([data-slot="card-description"]) {
+  grid-template-rows: auto auto;
+}
+
+.card-title {
+  font-family: inherit; /* font-heading - use inherited heading font */
+  font-size: 1rem; /* text-base */
+  line-height: 1.375; /* leading-snug */
+  font-weight: 500; /* font-medium */
+}
+
+/* Smaller title for small card size */
+.card[data-size="sm"] .card-title {
+  font-size: 0.875rem; /* text-sm */
+}
+
+.card-description {
+  font-size: 0.875rem; /* text-sm */
+  color: #64748b; /* text-muted-foreground (slate-500) */
+}
+
+.card-action {
+  grid-column-start: 2;
+  grid-row: span 2 / span 2;
+  grid-row-start: 1;
+  align-self: start;
+  justify-self: end;
+}
+
+.card-content {
+  padding-left: var(--card-spacing);
+  padding-right: var(--card-spacing);
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  border-radius: 0 0 0.75rem 0.75rem; /* rounded-b-xl */
+  border-top: 1px solid #e2e8f0; /* border-t (slate-200) */
+  background-color: rgba(241, 245, 249, 0.5); /* bg-muted/50 (slate-100 at 50%) */
+  padding: var(--card-spacing);
+}

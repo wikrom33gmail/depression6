@@ -1,0 +1,47 @@
+.radioGroup {
+  display: grid;
+  width: 100%;
+  gap: 0.5rem;
+}
+
+.radioItem[data-checked] .indicator {
+  background-color: #1e293b;
+  border-color: #1e293b;
+}
+
+.radioItem[data-checked] .dot {
+  opacity: 1;
+}
+
+.indicator {
+  display: flex;
+  height: 1.25rem;
+  width: 1.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid #94a3b8;
+  background-color: #ffffff;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.dot {
+  height: 0.625rem;
+  width: 0.625rem;
+  border-radius: 9999px;
+  background-color: #ffffff;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
