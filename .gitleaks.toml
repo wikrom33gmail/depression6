@@ -1,0 +1,14 @@
+[allowlists]
+  # False positive: MODIFIER_KEYS2 is a constant name, not an API key
+  regexes = [
+    "MODIFIER_KEYS2",
+  ]
+
+  # Ignore generated/build artifacts
+  paths = [
+    "dist/",
+    "*.report.json",
+    "*-report.json",
+    "gitleak-report.json",
+    "gitleaks-report.json",
+  ]
