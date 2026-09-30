@@ -21,7 +21,7 @@ export const translations = {
     ],
     submit: "รวมคะแนน",
     remaining: (n) => `เหลืออีก ${n} ข้อ`,
-    retake: "ทำแบบประเมินอีกครั้ง",
+    retake: "ทำใหม่",
     clear: "ล้างคำตอบ",
     back: "กลับไปหน้าแรก",
     severity: {
