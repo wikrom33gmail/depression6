@@ -99,11 +99,11 @@ function handleSubmit() {
           </CardContent>
         </Card>
         <div className={styles.fixedFooter}>
-          <Button onClick={handleReset} variant="outline" className={styles.submitButton} size="lg">
-            {t.retake}
-          </Button>
-          <Button onClick={() => setSubmitted(false)} variant="outline" className={styles.clearButton} size="lg">
+          <Button onClick={() => setSubmitted(false)} variant="outline" className={styles.submitButton} size="lg" style={{ backgroundColor: '#1e40af', color: 'white', width: '60%' }}>
             {t.back}
+          </Button>
+          <Button onClick={handleReset} variant="outline" className={styles.clearButton} size="lg" style={{ backgroundColor: 'white', color: '#1e40af', border: '2px solid #1e40af', width: '40%' }}>
+            {t.retake}
           </Button>
         </div>
       </div>
@@ -167,13 +167,13 @@ ref={questionRefs[i]}
 disabled={answeredCount < QUESTION_COUNT}
           className={styles.submitButton}
           size="lg"
-          style={{ backgroundColor: '#0f172a' }}
+          style={{ backgroundColor: '#1e40af', color: 'white', width: '60%' }}
         >
           {answeredCount < QUESTION_COUNT
             ? t.remaining(QUESTION_COUNT - answeredCount)
             : t.submit}
         </Button>
-        <Button onClick={handleReset} variant="outline" className={styles.clearButton} size="lg">
+        <Button onClick={handleReset} variant="outline" className={styles.clearButton} size="lg" style={{ backgroundColor: 'white', color: '#1e40af', border: '2px solid #1e40af', width: '40%' }}>
           {t.clear}
         </Button>
       </div>
