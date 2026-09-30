@@ -9,12 +9,14 @@
 .fixedHeader {
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 56rem;
   z-index: 1000;
   background-color: #ffffff;
   border-bottom: 2px solid #e5e7eb;
-  padding-left: 1.5rem;
+  padding: 0.5rem 1.5rem 0 1.5rem;
 }
 
 .titleRow {
@@ -22,27 +24,51 @@
   justify-content: space-between;
   align-items: center;
 }
+.langRow {
+  display: flex;
+  justify-content: flex-end;
+}
 
 .submitRow {
-  padding: 1rem;
+  padding: 0.5rem;
   display: flex;
   gap: 0.5rem;
 }
 
 .submitButton {
   flex: 4;
-  font-size: 1.75rem !important;
+  font-size: 1.25rem !important;
+  letter-spacing: 0.1em;
 }
 
 .clearButton {
   flex: 1;
-  font-size: 1.75rem !important;
+  font-size: 1.25rem !important;
+  letter-spacing: 0.1em;
 }
-
+.fixedFooter {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 56rem;
+  z-index: 1000;
+  background-color: #ffffff;
+  border-top: 2px solid #e5e7eb;
+  padding: 0.5rem 1.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+.progressContainer {
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
 .container {
   width: 100%;
   max-width: 56rem;
-  margin-top: 9rem;
+  margin-top: 8rem;
+  padding-bottom: 5rem;
 }
 
 .headerRow {

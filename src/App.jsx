@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react"
 import styles from "./App.module.css"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./components/ui/card"
 import { RadioGroup, RadioGroupItem } from "./components/ui/radio-group"
@@ -8,8 +7,9 @@ import { Progress } from "./components/ui/progress"
 import { LanguageSwitcher } from "./components/language-switcher"
 import { getPHQ9Severity, calculatePHQ9Score, PHQ9_MAX_SCORE } from "./lib/utils"
 import { translations } from "./lib/translations"
-
+import { useState, useEffect, useRef } from "react"
 const QUESTION_COUNT = 9
+
 
 export default function App() {
   const [lang, setLang] = useState("th")
@@ -25,6 +25,7 @@ export default function App() {
   })
 
   const [submitted, setSubmitted] = useState(false)
+const questionRefs = Array.from({ length: QUESTION_COUNT }, () => useRef(null))
 
   useEffect(() => {
     localStorage.setItem("phq9-answers", JSON.stringify(answers))
@@ -35,13 +36,32 @@ export default function App() {
 
   function handleAnswer(index, value) {
     if (!["0", "1", "2", "3"].includes(value)) return
-    setAnswers((prev) => ({ ...prev, [index]: value }))
+    setAnswers((prev) => {
+      const updated = { ...prev, [index]: value }
+      const count = Object.keys(updated).length
+      if (count >= 7 && count < QUESTION_COUNT) {
+        setTimeout(() => {
+          const firstUnanswered = [0,1,2,3,4,5,6,7,8].find((i) => updated[i] === undefined)
+          if (firstUnanswered !== undefined && questionRefs[firstUnanswered]?.current) {
+            questionRefs[firstUnanswered].current.scrollIntoView({ behavior: "smooth", block: "center" })
+          }
+        }, 50)
+      }
+      return updated
+    })
+  }
+function handleSubmit() {
+    if (answeredCount >= QUESTION_COUNT) {
+      setSubmitted(true)
+      return
+    }
+    if (answeredCount < 7) return
+    const firstUnanswered = [0, 1, 2, 3, 4, 5, 6, 7, 8].find((i) => answers[i] === undefined)
+    if (firstUnanswered !== undefined && questionRefs[firstUnanswered]?.current) {
+      questionRefs[firstUnanswered].current.scrollIntoView({ behavior: "smooth", block: "center" })
+    }
   }
 
-  function handleSubmit() {
-    if (answeredCount < QUESTION_COUNT) return
-    setSubmitted(true)
-  }
 
   function handleReset() {
     setAnswers({})
@@ -52,26 +72,40 @@ export default function App() {
   if (submitted) {
     const score = calculatePHQ9Score(answers)
     const severityKey = getPHQ9Severity(score)
-    const severityClass = styles["severity" + severityKey.charAt(0).toUpperCase() + severityKey.slice(1)]
+    const severityClass = styles[
+      "severity" +
+      severityKey.split("_").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join("")
+    ]
 
     return (
       <div className={styles.app}>
         <Card className={styles.container}>
-          <CardHeader>
-            <CardTitle>{t.title}</CardTitle>
-          </CardHeader>
+          <div className={styles.fixedHeader}>
+            <div className={styles.titleRow}>
+              <CardTitle>{t.title}</CardTitle>
+            </div>
+            <div className={styles.langRow}>
+              <LanguageSwitcher currentLang={lang} onLanguageChange={setLang} />
+            </div>
+            <div className={styles.subtitleRow}>
+              <CardDescription style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1e40af' }}>{t.description}</CardDescription>
+            </div>
+          </div>
           <CardContent className={styles.resultContainer}>
             <p className={styles.scoreDisplay}>{score}/{PHQ9_MAX_SCORE}</p>
             <p className={`${styles.severityLabel} ${severityClass}`}>
               {t.severity[severityKey]}
             </p>
-            <div className={styles.resultActions}>
-              <Button onClick={handleReset} variant="outline" style={{ fontSize: '1.2rem' }}>
-                {t.retake}
-              </Button>
-            </div>
           </CardContent>
         </Card>
+        <div className={styles.fixedFooter}>
+          <Button onClick={handleReset} variant="outline" className={styles.submitButton} size="lg">
+            {t.retake}
+          </Button>
+          <Button onClick={() => setSubmitted(false)} variant="outline" className={styles.clearButton} size="lg">
+            {t.back}
+          </Button>
+        </div>
       </div>
     )
   }
@@ -82,35 +116,24 @@ export default function App() {
         <div className={styles.fixedHeader}>
           <div className={styles.titleRow}>
             <CardTitle>{t.title}</CardTitle>
+          </div>
+          <div className={styles.langRow}>
             <LanguageSwitcher currentLang={lang} onLanguageChange={setLang} />
           </div>
-          <CardDescription style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1e40af', letterSpacing: '0.03em' }}>{t.description}</CardDescription>
-          <div className={styles.submitRow}>
-            <Button
-              onClick={handleSubmit}
-              disabled={answeredCount < QUESTION_COUNT}
-              className={styles.submitButton}
-              size="lg"
-              style={{ backgroundColor: '#0f172a' }}
-            >
-              {answeredCount < QUESTION_COUNT
-                ? t.remaining(QUESTION_COUNT - answeredCount)
-                : t.submit}
-            </Button>
-            <Button onClick={handleReset} variant="outline" className={styles.clearButton} size="lg">
-              {t.clear}
-            </Button>
+          <div className={styles.subtitleRow}>
+            <CardDescription style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1e40af' }}>{t.description}</CardDescription>
+          </div>
+          <div className={styles.progressContainer}>
+            <Progress value={progressPercent} />
           </div>
         </div>
         <CardContent>
 
-          <div className={styles.progressContainer}>
-            <Progress value={progressPercent} />
-          </div>
 
           {Array.from({ length: QUESTION_COUNT }).map((_, i) => (
             <div
               key={i}
+ref={questionRefs[i]}
               className={`${styles.questionCard} ${
                 answeredCount >= 7 && !answers[i] ? styles.highlighted : ""
               }`}
@@ -138,6 +161,22 @@ export default function App() {
           ))}
         </CardContent>
       </Card>
+      <div className={styles.fixedFooter}>
+        <Button
+          onClick={handleSubmit}
+disabled={answeredCount < QUESTION_COUNT}
+          className={styles.submitButton}
+          size="lg"
+          style={{ backgroundColor: '#0f172a' }}
+        >
+          {answeredCount < QUESTION_COUNT
+            ? t.remaining(QUESTION_COUNT - answeredCount)
+            : t.submit}
+        </Button>
+        <Button onClick={handleReset} variant="outline" className={styles.clearButton} size="lg">
+          {t.clear}
+        </Button>
+      </div>
     </div>
   )
 }
