@@ -99,12 +99,14 @@ function handleSubmit() {
           </CardContent>
         </Card>
         <div className={styles.fixedFooter}>
-          <Button onClick={() => setSubmitted(false)} variant="outline" className={styles.submitButton} size="lg" style={{ backgroundColor: '#1e40af', color: 'white', width: '60%' }}>
-            {t.back}
-          </Button>
-          <Button onClick={handleReset} variant="outline" className={styles.clearButton} size="lg" style={{ backgroundColor: 'white', color: '#1e40af', border: '2px solid #1e40af', width: '40%' }}>
-            {t.retake}
-          </Button>
+          <div className={styles.buttonRow}>
+            <Button onClick={() => setSubmitted(false)} variant="outline" className={styles.submitButton} size="lg" style={{ backgroundColor: '#1e40af', color: 'white', width: '60%' }}>
+              {t.back}
+            </Button>
+            <Button onClick={handleReset} variant="outline" className={styles.clearButton} size="lg" style={{ backgroundColor: 'white', color: '#1e40af', border: '2px solid #1e40af', width: '40%' }}>
+              {t.retake}
+            </Button>
+          </div>
         </div>
       </div>
     )
@@ -122,9 +124,6 @@ function handleSubmit() {
           </div>
           <div className={styles.subtitleRow}>
             <CardDescription style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1e40af' }}>{t.description}</CardDescription>
-          </div>
-          <div className={styles.progressContainer}>
-            <Progress value={progressPercent} />
           </div>
         </div>
         <CardContent>
@@ -162,20 +161,25 @@ ref={questionRefs[i]}
         </CardContent>
       </Card>
       <div className={styles.fixedFooter}>
-        <Button
-          onClick={handleSubmit}
+        <div className={styles.progressContainer}>
+          <Progress value={progressPercent} />
+        </div>
+        <div className={styles.buttonRow}>
+          <Button
+            onClick={handleSubmit}
 disabled={answeredCount < QUESTION_COUNT}
-          className={styles.submitButton}
-          size="lg"
-          style={{ backgroundColor: '#1e40af', color: 'white', width: '60%' }}
-        >
-          {answeredCount < QUESTION_COUNT
-            ? t.remaining(QUESTION_COUNT - answeredCount)
-            : t.submit}
-        </Button>
-        <Button onClick={handleReset} variant="outline" className={styles.clearButton} size="lg" style={{ backgroundColor: 'white', color: '#1e40af', border: '2px solid #1e40af', width: '40%' }}>
-          {t.clear}
-        </Button>
+            className={styles.submitButton}
+            size="lg"
+            style={{ backgroundColor: '#1e40af', color: 'white', width: '60%' }}
+          >
+            {answeredCount < QUESTION_COUNT
+              ? t.remaining(QUESTION_COUNT - answeredCount)
+              : t.submit}
+          </Button>
+          <Button onClick={handleReset} variant="outline" className={styles.clearButton} size="lg" style={{ backgroundColor: 'white', color: '#1e40af', border: '2px solid #1e40af', width: '40%' }}>
+            {t.clear}
+          </Button>
+        </div>
       </div>
     </div>
   )

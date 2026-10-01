@@ -54,7 +54,7 @@ export const translations = {
     ],
     submit: "Submit Assessment",
     remaining: (n) => `${n} questions remaining`,
-    retake: "Retake Assessment",
+    retake: "Retake",
     clear: "Clear",
     back: "Back",
     severity: {
