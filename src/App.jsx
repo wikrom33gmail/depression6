@@ -38,15 +38,20 @@ const questionRefs = Array.from({ length: QUESTION_COUNT }, () => useRef(null))
     if (!["0", "1", "2", "3"].includes(value)) return
     setAnswers((prev) => {
       const updated = { ...prev, [index]: value }
-      const count = Object.keys(updated).length
-      if (count >= 7 && count < QUESTION_COUNT) {
-        setTimeout(() => {
-          const firstUnanswered = [0,1,2,3,4,5,6,7,8].find((i) => updated[i] === undefined)
-          if (firstUnanswered !== undefined && questionRefs[firstUnanswered]?.current) {
-            questionRefs[firstUnanswered].current.scrollIntoView({ behavior: "smooth", block: "center" })
+      setTimeout(() => {
+        // Find next unanswered question, wrapping around
+        let targetIndex = -1
+        for (let offset = 1; offset <= QUESTION_COUNT; offset++) {
+          const candidate = (index + offset) % QUESTION_COUNT
+          if (updated[candidate] === undefined) {
+            targetIndex = candidate
+            break
           }
-        }, 50)
-      }
+        }
+        if (targetIndex !== -1 && questionRefs[targetIndex]?.current) {
+          questionRefs[targetIndex].current.scrollIntoView({ behavior: "smooth", block: "center" })
+        }
+      }, 50)
       return updated
     })
   }

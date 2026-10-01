@@ -38,6 +38,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
-.gitleaks.toml
+*gitleaks*
 view-caddy-log.sh
 
